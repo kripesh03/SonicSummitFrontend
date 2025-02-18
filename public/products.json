@@ -99,10 +99,10 @@
         "_id": "9",
         "title": "Summer Vibes",
         "artistName": "Artist I",
-        "productFile": "summer_vibes.mp3",
+        "productFile": "albatross.jpg",
         "description": "A summer-themed mixtape by Artist I.",
         "category": "Mixtape",
-        "image": "summer_vibes.jpg",
+        "image": "albatross.jpg",
         "trending": false,
         "oldPrice": 11.99,
         "newPrice": 9.99

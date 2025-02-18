@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Pagination, Navigation } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import ProductCard from "../products/ProductCard";
+import { useFetchAllProductsQuery } from "../../redux/features/products/productApi";
 
 // Import Swiper styles
 import "swiper/css";
@@ -18,14 +19,11 @@ const categories = [
   "Concert Tickets",
 ];
 export const TopSellers = () => {
-  const [products, setProducts] = useState([]);
 
   const [selectedCategory, setSelectedCategory] = useState("Choose a Category");
-  useEffect(() => {
-    fetch("products.json")
-      .then((res) => res.json())
-      .then((data) => setProducts(data));
-  }, []);
+  
+  const {data:products = []} = useFetchAllProductsQuery();
+  console.log(products)
 
   const filteredProducts =
     selectedCategory === "Choose a Category"

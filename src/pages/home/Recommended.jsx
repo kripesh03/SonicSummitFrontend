@@ -10,19 +10,12 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 import ProductCard from '../products/ProductCard';
-
+import { useFetchAllProductsQuery } from '../../redux/features/products/productApi';
 
 const Recommened = () => {
    
 
-    const [products, setProducts] = useState([]);
-      useEffect(() => {
-        fetch("products.json")
-          .then((res) => res.json())
-          .then((
-            data) => setProducts(data));
-      }, []);
-
+    const{data:products = []} = useFetchAllProductsQuery();
 
   return (
     <div className='py-16'>
@@ -56,7 +49,7 @@ const Recommened = () => {
             >
 
                 {
-                   products.length > 0 && products.slice(8, 18).map((product, index) => (
+                   products.length > 0 && products.slice(1, 100000000000000000000000000000000000000).map((product, index) => (
                         <SwiperSlide key={index}>
                             <ProductCard  product={product} />
                         </SwiperSlide>
