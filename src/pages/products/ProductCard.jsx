@@ -13,13 +13,17 @@ const ProductCard = ({ product }) => {
     dispatch(addToCart(product));
   };
 
+  // Convert Decimal128 values to normal numbers (or strings)
+  const newPrice = Number(product.new_price.$numberDecimal);
+  const oldPrice = Number(product.old_price.$numberDecimal);
+
   return (
     <div className="rounded-lg transition-shadow duration-300">
       <div className="flex flex-col sm:flex-row sm:items-center sm:h-72 sm:justify-center gap-4">
         <div className="sm:h-72 sm:flex-shrink-0 border rounded-md">
           <Link to={`/products/${product._id}`}>
             <img
-              src={getImgUrl(product.image)}
+              src={getImgUrl(product.image)} // Assuming product.image is already correct
               alt=""
               className="w-full bg-cover p-2 rounded-md cursor-pointer hover:scale-105 transition-all duration-200"
             />
@@ -38,9 +42,9 @@ const ProductCard = ({ product }) => {
               : product?.description}
           </p>
           <p className="font-medium mb-5">
-            ${product.newPrice}{' '}
+            ${newPrice}{' '} {/* Use the converted value */}
             <span className="line-through font-normal ml-2">
-              ${product.oldPrice}
+              ${oldPrice} {/* Use the converted value */}
             </span>
           </p>
           <button
@@ -55,5 +59,6 @@ const ProductCard = ({ product }) => {
     </div>
   );
 };
+
 
 export default ProductCard;

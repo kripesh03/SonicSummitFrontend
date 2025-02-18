@@ -16,18 +16,45 @@ const baseQuery = fetchBaseQuery({
 
 // API slice
 const productsApi = createApi({
-  reducerPath: "productsApi", // Corrected the typo here
+  reducerPath: "productsApi",
   baseQuery,
   tagTypes: ["Product"],
   endpoints: (builder) => ({
     fetchAllProducts: builder.query({
       query: () => "/",
-      providesTags: ["Product"], // Corrected placement here
+      providesTags: ["Product"],
     }),
+    fetchProductById: builder.query({
+      query: (id) => `/${id}`,
+      providesTags: (result, error, id) => [{ type: "Product", id }],
+    }),
+    addProduct: builder.mutation({
+      query: (newProduct) => ({
+        url: "/create-product",
+        method: "POST",
+        body: newProduct,
+      }),
+      invalidatesTags: ["Product"],
+    }),
+    updateProduct: builder.mutation({
+      query: ({ id, ...rest }) => ({
+        url: `/edit/${id}`,
+        method: "PUT",
+        body: rest,
+        headers: { "Content-Type": "application/json" },
+      }),
+      invalidatesTags: ["Product"],
+    }),
+    deleteBook: builder.mutation({ query: (id) => ({ url: `/${id}`, method: "DELETE" }),invalidatesTags: ["Product"]}),
   }),
 });
 
-// Export the hook for the query
-export const { useFetchAllProductsQuery } = productsApi;
+// Export the hooks for the queries and mutations
+export const {
+  useFetchAllProductsQuery,
+  useFetchProductByIdQuery,
+  useAddProductMutation,
+  useUpdateProductMutation,
+} = productsApi;
 
 export default productsApi;
