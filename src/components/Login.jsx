@@ -1,19 +1,23 @@
 import React, { useState } from 'react';
 import { useForm } from "react-hook-form";
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import { Link } from 'react-router-dom';
 
 const Login = () => {
     const [message, setMessage] = useState('');
+    const { register, handleSubmit, formState: { errors } } = useForm();
+    const navigate = useNavigate();
 
-    const {
-        register,
-        handleSubmit,
-        watch,
-        formState: { errors },
-    } = useForm();
-
-    const onSubmit = (data) => {
-        console.log(data);
+    const onSubmit = async (data) => {
+        try {
+            const response = await axios.post("http://localhost:3000/api/auth/login", data);
+            localStorage.setItem("token", response.data.token); // Store token
+            setMessage("Login successful");
+            navigate("/"); // Redirect to the home page after login
+        } catch (error) {
+            setMessage(error.response?.data?.message || "Login failed");
+        }
     };
 
     return (

@@ -1,19 +1,21 @@
 import React, { useState } from 'react';
 import { useForm } from "react-hook-form";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const Register = () => {
     const [message, setMessage] = useState('');
+    const { register, handleSubmit, formState: { errors } } = useForm();
+    const navigate = useNavigate();
 
-    const {
-        register,
-        handleSubmit,
-        watch,
-        formState: { errors },
-    } = useForm();
-
-    const onSubmit = (data) => {
-        console.log(data);
+    const onSubmit = async (data) => {
+        try {
+            const response = await axios.post("http://localhost:3000/api/auth/register", data);
+            setMessage("Registration successful. Please check your email for verification.");
+            navigate("/login"); // Redirect to login page after successful registration
+        } catch (error) {
+            setMessage(error.response?.data?.message || "Registration failed");
+        }
     };
 
     return (
