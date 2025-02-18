@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 function CheckoutPage() {
     const cartItems = useSelector(state => state.cart.cartItems);
@@ -13,10 +13,12 @@ function CheckoutPage() {
         formState: { errors },
     } = useForm();
 
+    const [isChecked, setIsChecked] = useState(false);
+    const [isLoggedIn, setIsLoggedIn] = useState(false); // Track login state
+    const navigate = useNavigate();
+
     // Dummy user (Replace with actual user authentication)
     const currentUser = { email: "user@example.com" };
-
-    const [isChecked, setIsChecked] = useState(false);
 
     const handleCheckboxChange = () => {
         setIsChecked(!isChecked);
@@ -42,6 +44,17 @@ function CheckoutPage() {
         // Simulate order placement (You can replace this with an API call)
         alert("Order placed successfully!");
     };
+
+    useEffect(() => {
+        // Check if the user is logged in by checking the token in localStorage
+        const token = localStorage.getItem('token');
+        if (!token) {
+            // Redirect to login page if no token is found
+            navigate("/login");
+        } else {
+            setIsLoggedIn(true);
+        }
+    }, [navigate]);
 
     return (
         <section>
@@ -164,9 +177,7 @@ function CheckoutPage() {
                                             <button
                                                 type="submit"
                                                 disabled={!isChecked}
-                                                className={`py-2 px-4 rounded font-bold text-white transition ${
-                                                    isChecked ? "bg-blue-500 hover:bg-blue-700" : "bg-gray-400 cursor-not-allowed"
-                                                }`}
+                                                className={`py-2 px-4 rounded font-bold text-white transition ${isChecked ? "bg-blue-500 hover:bg-blue-700" : "bg-gray-400 cursor-not-allowed"}`}
                                             >
                                                 Place an Order
                                             </button>
