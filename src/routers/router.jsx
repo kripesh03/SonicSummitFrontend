@@ -7,6 +7,8 @@ import CartPage from "../pages/products/CartPage";
 import CheckoutPage from "../pages/products/CheckoutPage";
 import SingleProduct from "../pages/products/SingleProduct";
 import OrderPage from "../pages/products/OrderPage";
+import AdminRoute from "./AdminRoute";
+import AdminLogin from "../components/AdminLogin";
 
 
 const router= createBrowserRouter([
@@ -52,6 +54,22 @@ const router= createBrowserRouter([
             
         ]
     },
+
+    {
+        path: '/admin',
+        element: <AdminLogin/>
+    },
+
+    {
+        path: '/dashboard',
+        element: <AdminRoute> <div>Admin Dashboard </div> </AdminRoute>,
+        children: [
+            {path: '', element: <AdminRoute> <div>Admin Dashboard </div> </AdminRoute>},
+            {path: 'add-new-product', element: <AdminRoute> <div>Add New Product</div> </AdminRoute>},
+            {path: 'edit-product/:id', element: <AdminRoute> <div>Edit Product</div> </AdminRoute>},
+            {path: "manage-product" , element: <AdminRoute> <div>Manage Product</div> </AdminRoute>},
+        ]
+    }
 ])
 
 export default router;
