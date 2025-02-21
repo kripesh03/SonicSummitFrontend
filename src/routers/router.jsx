@@ -6,6 +6,7 @@ import Register from "../components/Register";
 import CartPage from "../pages/products/CartPage";
 import CheckoutPage from "../pages/products/CheckoutPage";
 import SingleProduct from "../pages/products/SingleProduct";
+import OrderPage from "../pages/products/OrderPage";
 
 
 const router= createBrowserRouter([
@@ -19,7 +20,7 @@ const router= createBrowserRouter([
             },
             {
                 path : '/orders',
-                element: <div>Orders Page</div>
+                element: <OrderPage/>
             },
             {
                 path : '/about',

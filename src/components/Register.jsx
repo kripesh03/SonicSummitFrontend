@@ -11,12 +11,15 @@ const Register = () => {
     const onSubmit = async (data) => {
         try {
             const response = await axios.post("http://localhost:3000/api/auth/register", data);
+            localStorage.setItem("email", data.email); // Store email in localStorage
             setMessage("Registration successful. Please check your email for verification.");
             navigate("/login"); // Redirect to login page after successful registration
         } catch (error) {
             setMessage(error.response?.data?.message || "Registration failed");
         }
     };
+    
+    
 
     return (
         <div className='h-screen flex justify-center items-center'>

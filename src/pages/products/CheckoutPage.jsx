@@ -1,11 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { useCreateOrderMutation } from '../../redux/orders/ordersApi';
 
 function CheckoutPage() {
     const cartItems = useSelector(state => state.cart.cartItems);
-    const totalPrice = cartItems.reduce((acc, item) => acc + item.newPrice, 0).toFixed(2);
+
+    const [createOrder] = useCreateOrderMutation();
+    const [isChecked, setIsChecked] = useState(false);
+    const navigate = useNavigate();
 
     const {
         register,
@@ -13,21 +17,19 @@ function CheckoutPage() {
         formState: { errors },
     } = useForm();
 
-    const [isChecked, setIsChecked] = useState(false);
-    const [isLoggedIn, setIsLoggedIn] = useState(false); // Track login state
-    const navigate = useNavigate();
+    // Calculate total price
+    const totalPrice = cartItems.reduce((acc, item) => {
+        const price = parseFloat(item.newPrice);
+        if (!isNaN(price)) {
+            return acc + price;
+        }
+        return acc;
+    }, 0).toFixed(2);
 
-    // Dummy user (Replace with actual user authentication)
-    const currentUser = { email: "user@example.com" };
-
-    const handleCheckboxChange = () => {
-        setIsChecked(!isChecked);
-    };
-
-    const onSubmit = (data) => {
+    const onSubmit = async (data) => {
         const newOrder = {
             name: data.name,
-            email: currentUser.email,
+            email: data.email,  // Use the email entered by the user
             address: {
                 city: data.city,
                 country: data.country,
@@ -39,22 +41,14 @@ function CheckoutPage() {
             totalPrice: totalPrice
         };
 
-        console.log("Order Placed:", newOrder);
-
-        // Simulate order placement (You can replace this with an API call)
-        alert("Order placed successfully!");
-    };
-
-    useEffect(() => {
-        // Check if the user is logged in by checking the token in localStorage
-        const token = localStorage.getItem('token');
-        if (!token) {
-            // Redirect to login page if no token is found
-            navigate("/login");
-        } else {
-            setIsLoggedIn(true);
+        try {
+            const response = await createOrder(newOrder).unwrap();
+            alert("Order placed successfully!");
+            navigate("/");  // Redirect to home page after order placement
+        } catch (error) {
+            alert("Error placing order. Please try again.");
         }
-    }, [navigate]);
+    };
 
     return (
         <section>
@@ -88,34 +82,23 @@ function CheckoutPage() {
                                         <div className="md:col-span-5">
                                             <label htmlFor="email">Email Address</label>
                                             <input
-                                                type="text"
+                                                {...register("email", { required: true })}
+                                                type="email"
                                                 id="email"
                                                 className="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
-                                                disabled
-                                                value={currentUser.email}
                                             />
-                                        </div>
-
-                                        <div className="md:col-span-5">
-                                            <label htmlFor="phone">Phone Number</label>
-                                            <input
-                                                {...register("phone", { required: true })}
-                                                type="number"
-                                                id="phone"
-                                                className="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
-                                                placeholder="+123 456 7890"
-                                            />
-                                            {errors.phone && <p className="text-red-500 text-xs">Phone Number is required</p>}
+                                            {errors.email && <p className="text-red-500 text-xs">Email is required</p>}
                                         </div>
 
                                         <div className="md:col-span-3">
-                                            <label htmlFor="address">Address / Street</label>
+                                            <label htmlFor="phone">Phone Number</label>
                                             <input
-                                                {...register("address", { required: true })}
+                                                {...register("phone", { required: true })}
                                                 type="text"
-                                                id="address"
+                                                id="phone"
                                                 className="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
                                             />
+                                            {errors.phone && <p className="text-red-500 text-xs">Phone Number is required</p>}
                                         </div>
 
                                         <div className="md:col-span-2">
@@ -126,6 +109,18 @@ function CheckoutPage() {
                                                 id="city"
                                                 className="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
                                             />
+                                            {errors.city && <p className="text-red-500 text-xs">City is required</p>}
+                                        </div>
+
+                                        <div className="md:col-span-2">
+                                            <label htmlFor="state">State</label>
+                                            <input
+                                                {...register("state", { required: true })}
+                                                type="text"
+                                                id="state"
+                                                className="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
+                                            />
+                                            {errors.state && <p className="text-red-500 text-xs">State is required</p>}
                                         </div>
 
                                         <div className="md:col-span-2">
@@ -136,53 +131,29 @@ function CheckoutPage() {
                                                 id="country"
                                                 className="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
                                             />
+                                            {errors.country && <p className="text-red-500 text-xs">Country is required</p>}
                                         </div>
 
                                         <div className="md:col-span-2">
-                                            <label htmlFor="state">State / Province</label>
-                                            <input
-                                                {...register("state", { required: true })}
-                                                type="text"
-                                                id="state"
-                                                className="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
-                                            />
-                                        </div>
-
-                                        <div className="md:col-span-1">
-                                            <label htmlFor="zipcode">Zipcode</label>
+                                            <label htmlFor="zipcode">Zip Code</label>
                                             <input
                                                 {...register("zipcode", { required: true })}
                                                 type="text"
                                                 id="zipcode"
                                                 className="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
                                             />
-                                        </div>
-
-                                        <div className="md:col-span-5 mt-3">
-                                            <div className="inline-flex items-center">
-                                                <input
-                                                    type="checkbox"
-                                                    id="billing_same"
-                                                    className="form-checkbox"
-                                                    checked={isChecked}
-                                                    onChange={handleCheckboxChange}
-                                                />
-                                                <label htmlFor="billing_same" className="ml-2">
-                                                    I agree to the <Link className='underline underline-offset-2 text-blue-600'>Terms & Conditions</Link> and <Link className='underline underline-offset-2 text-blue-600'>Shopping Policy.</Link>
-                                                </label>
-                                            </div>
-                                        </div>
-
-                                        <div className="md:col-span-5 text-right">
-                                            <button
-                                                type="submit"
-                                                disabled={!isChecked}
-                                                className={`py-2 px-4 rounded font-bold text-white transition ${isChecked ? "bg-blue-500 hover:bg-blue-700" : "bg-gray-400 cursor-not-allowed"}`}
-                                            >
-                                                Place an Order
-                                            </button>
+                                            {errors.zipcode && <p className="text-red-500 text-xs">Zip Code is required</p>}
                                         </div>
                                     </div>
+                                </div>
+
+                                <div className="lg:col-span-2 flex justify-end items-center">
+                                    <button
+                                        type="submit"
+                                        className="bg-purple-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                                    >
+                                        Place Order
+                                    </button>
                                 </div>
                             </form>
                         </div>

@@ -1,6 +1,6 @@
-import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { Link, useNavigate } from 'react-router-dom'
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link, useNavigate } from 'react-router-dom';
 import { getImgUrl } from '../../utils/getImgUrl';
 import { clearCart, removeFromCart } from '../../redux/features/cart/cartSlice';
 
@@ -9,15 +9,34 @@ const CartPage = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const totalPrice = cartItems.reduce((acc, item) => acc + item.newPrice, 0).toFixed(2);
+    // Function to safely extract a price value
+    const parsePrice = (price) => {
+        if (price && typeof price === 'object' && price.$numberDecimal) {
+            return parseFloat(price.$numberDecimal); // If it's a Decimal128 type, extract the number
+        }
+        return parseFloat(price) || 0; // Return 0 if not a valid number
+    };
+
+    // Calculate total price
+    const totalPrice = cartItems.reduce((acc, item) => {
+        const newPrice = parsePrice(item.new_price); // Use parsePrice for new_price
+        return acc + newPrice;
+    }, 0).toFixed(2);
+
+    // Calculate total savings
+    const totalSavings = cartItems.reduce((acc, item) => {
+        const oldPrice = parsePrice(item.old_price); // Use parsePrice for old_price
+        const newPrice = parsePrice(item.new_price); // Use parsePrice for new_price
+        return acc + (oldPrice - newPrice);
+    }, 0).toFixed(2);
 
     const handleRemoveFromCart = (product) => {
-        dispatch(removeFromCart(product))
-    }
+        dispatch(removeFromCart(product));
+    };
 
     const handleClearCart = () => {
-        dispatch(clearCart())
-    }
+        dispatch(clearCart());
+    };
 
     // Check if the user is logged in
     const token = localStorage.getItem('token');
@@ -30,7 +49,7 @@ const CartPage = () => {
         } else {
             navigate("/checkout"); // Proceed to checkout if logged in
         }
-    }
+    };
 
     return (
         <>
@@ -71,7 +90,7 @@ const CartPage = () => {
                                                                 <h3>
                                                                     <Link to='/'>{product?.title}</Link>
                                                                 </h3>
-                                                                <p className="sm:ml-4">${product?.newPrice}</p>
+                                                                <p className="sm:ml-4">${parsePrice(product?.new_price).toFixed(2)}</p> {/* Safely parse and format price */}
                                                             </div>
                                                             <p className="mt-1 text-sm text-gray-500 capitalize"><strong>Category: </strong>{product?.category}</p>
                                                         </div>
@@ -100,9 +119,10 @@ const CartPage = () => {
                 <div className="border-t border-gray-200 px-4 py-6 sm:px-6">
                     <div className="flex justify-between text-base font-medium text-gray-900">
                         <p>Subtotal</p>
-                        <p>${totalPrice ? totalPrice : 0}</p>
+                        <p>${totalPrice}</p> {/* Display totalPrice */}
                     </div>
                     <p className="mt-0.5 text-sm text-gray-500">Shipping and taxes calculated at checkout.</p>
+                    
                     <div className="mt-6">
                         <button
                             onClick={handleCheckout} // Call the handleCheckout function
@@ -126,7 +146,7 @@ const CartPage = () => {
                 </div>
             </div>
         </>
-    )
-}
+    );
+};
 
 export default CartPage;

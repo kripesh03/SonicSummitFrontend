@@ -13,12 +13,15 @@ const Login = () => {
         try {
             const response = await axios.post("http://localhost:3000/api/auth/login", data);
             localStorage.setItem("token", response.data.token); // Store token
+            localStorage.setItem("email", data.email);  // Save the email after login
+            
             setMessage("Login successful");
             navigate("/"); // Redirect to the home page after login
         } catch (error) {
             setMessage(error.response?.data?.message || "Login failed");
         }
     };
+    
 
     return (
         <div className='h-screen flex justify-center items-center'>
