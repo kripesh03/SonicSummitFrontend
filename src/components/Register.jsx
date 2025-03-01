@@ -1,25 +1,23 @@
 import React, { useState } from 'react';
 import { useForm } from "react-hook-form";
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 const Register = () => {
     const [message, setMessage] = useState('');
+    const [isSubmitted, setIsSubmitted] = useState(false);
     const { register, handleSubmit, formState: { errors } } = useForm();
-    const navigate = useNavigate();
 
     const onSubmit = async (data) => {
         try {
             const response = await axios.post("http://localhost:3000/api/auth/register", data);
-            localStorage.setItem("email", data.email); // Store email in localStorage
-            setMessage("Registration successful. Please check your email for verification.");
-            navigate("/login"); // Redirect to login page after successful registration
+            localStorage.setItem("email", data.email);
+            setMessage("Registration successful. Please check your email for verification before logging in.");
+            setIsSubmitted(true); // Prevents further submissions
         } catch (error) {
             setMessage(error.response?.data?.message || "Registration failed");
         }
     };
-    
-    
 
     return (
         <div className='h-screen flex justify-center items-center'>
@@ -47,13 +45,24 @@ const Register = () => {
                         <textarea {...register("bio")} name='bio' id='bio' placeholder='Tell us about yourself' className='shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow' />
                     </div>
 
-                    {message && <p className='text-red-500 text-xs italic'>{message}</p>}
+                    {message && <p className='text-green-500 text-sm italic mb-4'>{message}</p>}
 
                     <div>
-                        <button className='bg-purple-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline' type='submit'>Register</button>
+                        <button 
+                            className={`bg-purple-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline ${isSubmitted ? 'opacity-50 cursor-not-allowed' : ''}`} 
+                            type='submit' 
+                            disabled={isSubmitted}
+                        >
+                            {isSubmitted ? 'Check Email' : 'Register'}
+                        </button>
                     </div>
                 </form>
-                <p className='align-baseline font-medium mt-4 text-sm'>Already have an account? <Link to='/login' className="text-blue-500 hover:text-blue-700">Log in Here</Link></p>
+
+                {isSubmitted && (
+                    <p className='mt-4 text-sm text-gray-700'>
+                        After confirming your email, you can <Link to='/login' className="text-blue-500 hover:text-blue-700">Log in Here</Link>.
+                    </p>
+                )}
             </div>
         </div>
     );

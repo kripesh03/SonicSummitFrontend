@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router-dom"
+import { createBrowserRouter } from "react-router-dom";
 import App from "../App";
 import Home from "../pages/home/Home";
 import Login from "../components/Login";
@@ -15,71 +15,39 @@ import ManageProducts from "../pages/dashboard/manageProducts/ManageProducts";
 import AddProduct from "../pages/dashboard/addProduct/AddProduct";
 import UpdateProduct from "../pages/dashboard/updateProduct/UpdateProduct";
 import BrowsePage from "../pages/products/BrowsePage";
+import Verify from "../utils/verifyUser";
 
-
-const router= createBrowserRouter([
+const router = createBrowserRouter([
     {
-        path:'/',
-        element: <App/>,
+        path: '/',
+        element: <App />,
         children: [
-            {
-                path: '/',
-                element : <Home/>
-            },
-            {
-                path : '/orders',
-                element: <OrderPage/>
-            },
-            {
-                path : '/about',
-                element: <div>About</div>
-            }
-            ,
-            {
-                path : '/login',
-                element: <Login/>
-            }
-            ,
-            {
-                path: '/browse',
-                element: <BrowsePage/>
-            },
-            {
-                path : '/register',
-                element: <Register/>
-            },
-            {
-                path : '/cart',
-                element: <CartPage/>
-            },
-            {
-                path : '/checkout',
-                element: <CheckoutPage/>
-            },
-
-            {
-                path : '/products/:id',
-                element: <SingleProduct/>
-            },
-            
+            { path: '/', element: <Home /> },
+            { path: '/orders', element: <OrderPage /> },
+            { path: '/about', element: <div>About</div> },
+            { path: '/login', element: <Login /> },
+            { path: '/browse', element: <BrowsePage /> },
+            { path: '/register', element: <Register /> },
+            { path: '/cart', element: <CartPage /> },
+            { path: '/checkout', element: <CheckoutPage /> },
+            { path: '/products/:id', element: <SingleProduct /> },
+            { path: '/verify-success', element: <Verify /> }, // Added Verify Route
         ]
     },
-
     {
         path: '/admin',
-        element: <AdminLogin/>
+        element: <AdminLogin />
     },
-
     {
         path: '/dashboard',
-        element: <AdminRoute> <DasboardLayout/> </AdminRoute>,
+        element: <AdminRoute><DasboardLayout /></AdminRoute>,
         children: [
-            {path: '', element: <AdminRoute> <Dashboard/> </AdminRoute>},
-            {path: 'add-new-product', element: <AdminRoute> <AddProduct/> </AdminRoute>},
-            {path: 'edit-product/:id', element: <AdminRoute> <UpdateProduct/> </AdminRoute>},
-            {path: "manage-product" , element: <AdminRoute> <ManageProducts/> </AdminRoute>},
+            { path: '', element: <AdminRoute><Dashboard /></AdminRoute> },
+            { path: 'add-new-product', element: <AdminRoute><AddProduct /></AdminRoute> },
+            { path: 'edit-product/:id', element: <AdminRoute><UpdateProduct /></AdminRoute> },
+            { path: "manage-product", element: <AdminRoute><ManageProducts /></AdminRoute> },
         ]
     }
-])
+]);
 
 export default router;
