@@ -20,14 +20,19 @@ const productsApi = createApi({
   baseQuery,
   tagTypes: ["Product"],
   endpoints: (builder) => ({
+    // Fetch all products
     fetchAllProducts: builder.query({
       query: () => "/",
       providesTags: ["Product"],
     }),
+
+    // Fetch a product by ID
     fetchProductById: builder.query({
       query: (id) => `/${id}`,
       providesTags: (result, error, id) => [{ type: "Product", id }],
     }),
+
+    // Create a new product
     addProduct: builder.mutation({
       query: (newProduct) => ({
         url: "/create-product",
@@ -36,6 +41,8 @@ const productsApi = createApi({
       }),
       invalidatesTags: ["Product"],
     }),
+
+    // Update a product
     updateProduct: builder.mutation({
       query: ({ id, ...rest }) => ({
         url: `/edit/${id}`,
@@ -45,7 +52,15 @@ const productsApi = createApi({
       }),
       invalidatesTags: ["Product"],
     }),
-    deleteBook: builder.mutation({ query: (id) => ({ url: `/${id}`, method: "DELETE" }),invalidatesTags: ["Product"]}),
+
+    // Delete a product by ID
+    deleteProduct: builder.mutation({
+      query: (id) => ({
+        url: `/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Product"],
+    }),
   }),
 });
 
@@ -55,6 +70,7 @@ export const {
   useFetchProductByIdQuery,
   useAddProductMutation,
   useUpdateProductMutation,
+  useDeleteProductMutation,
 } = productsApi;
 
 export default productsApi;

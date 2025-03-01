@@ -9,6 +9,11 @@ import SingleProduct from "../pages/products/SingleProduct";
 import OrderPage from "../pages/products/OrderPage";
 import AdminRoute from "./AdminRoute";
 import AdminLogin from "../components/AdminLogin";
+import DasboardLayout from "../pages/dashboard/DasboardLayout";
+import Dashboard from "../pages/dashboard/DashBoard";
+import ManageProducts from "../pages/dashboard/manageProducts/ManageProducts";
+import AddProduct from "../pages/dashboard/addProduct/AddProduct";
+import UpdateProduct from "../pages/dashboard/updateProduct/UpdateProduct";
 
 
 const router= createBrowserRouter([
@@ -62,12 +67,12 @@ const router= createBrowserRouter([
 
     {
         path: '/dashboard',
-        element: <AdminRoute> <div>Admin Dashboard </div> </AdminRoute>,
+        element: <AdminRoute> <DasboardLayout/> </AdminRoute>,
         children: [
-            {path: '', element: <AdminRoute> <div>Admin Dashboard </div> </AdminRoute>},
-            {path: 'add-new-product', element: <AdminRoute> <div>Add New Product</div> </AdminRoute>},
-            {path: 'edit-product/:id', element: <AdminRoute> <div>Edit Product</div> </AdminRoute>},
-            {path: "manage-product" , element: <AdminRoute> <div>Manage Product</div> </AdminRoute>},
+            {path: '', element: <AdminRoute> <Dashboard/> </AdminRoute>},
+            {path: 'add-new-product', element: <AdminRoute> <AddProduct/> </AdminRoute>},
+            {path: 'edit-product/:id', element: <AdminRoute> <UpdateProduct/> </AdminRoute>},
+            {path: "manage-product" , element: <AdminRoute> <ManageProducts/> </AdminRoute>},
         ]
     }
 ])
