@@ -11,20 +11,27 @@ function CheckoutPage() {
     const [isChecked, setIsChecked] = useState(false);
     const navigate = useNavigate();
 
+    console.log(cartItems);
+
     const {
         register,
         handleSubmit,
         formState: { errors },
     } = useForm();
 
-    // Calculate total price
+    // Calculate total price here from cartItems
     const totalPrice = cartItems.reduce((acc, item) => {
-        const price = parseFloat(item.newPrice);
-        if (!isNaN(price)) {
-            return acc + price;
-        }
-        return acc;
-    }, 0).toFixed(2);
+    // Check if new_price exists and get the value from $numberDecimal
+    const price = item.new_price && item.new_price.$numberDecimal 
+        ? parseFloat(item.new_price.$numberDecimal) 
+        : 0;
+    return acc + price;
+}, 0).toFixed(2);
+
+console.log("Total Price:", totalPrice); // Log the total price
+
+    
+    
 
     const onSubmit = async (data) => {
         const newOrder = {
@@ -56,7 +63,7 @@ function CheckoutPage() {
                 <div className="container max-w-screen-lg mx-auto">
                     <div>
                         <h2 className="font-semibold text-xl text-gray-600 mb-2">Cash On Delivery</h2>
-                        <p className="text-gray-500 mb-2">Total Price: ${totalPrice}</p>
+                        <p className="text-gray-500 mb-2">Total Price: ${totalPrice}</p> {/* Display totalPrice */}
                         <p className="text-gray-500 mb-6">Items: {cartItems.length}</p>
 
                         <div className="bg-white rounded shadow-lg p-4 px-4 md:p-8 mb-6">

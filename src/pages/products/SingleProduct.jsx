@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { addToCart } from '../../redux/features/cart/cartSlice';
 import { useFetchProductByIdQuery } from '../../redux/features/products/productApi';
-// import { getImgUrl } from '../../utils/getImgUrl';
+import { getImgUrl } from '../../utils/getImgUrl';
 
 const SingleProduct = () => {
     const { id } = useParams();
@@ -32,13 +32,13 @@ const SingleProduct = () => {
             <h1 className="text-2xl font-bold mb-6">{product.title}</h1>
 
             <div>
-                {/* <div>
+                <div>
                     <img
                         src={getImgUrl(product.productImage)} // Correct image field
                         alt={product.title}
                         className="mb-8"
                     />
-                </div> */}
+                </div>
 
                 <div className="mb-5">
                     <p className="text-gray-700 mb-2">

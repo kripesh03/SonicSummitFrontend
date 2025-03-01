@@ -14,6 +14,7 @@ import Dashboard from "../pages/dashboard/DashBoard";
 import ManageProducts from "../pages/dashboard/manageProducts/ManageProducts";
 import AddProduct from "../pages/dashboard/addProduct/AddProduct";
 import UpdateProduct from "../pages/dashboard/updateProduct/UpdateProduct";
+import BrowsePage from "../pages/products/BrowsePage";
 
 
 const router= createBrowserRouter([
@@ -39,6 +40,10 @@ const router= createBrowserRouter([
                 element: <Login/>
             }
             ,
+            {
+                path: '/browse',
+                element: <BrowsePage/>
+            },
             {
                 path : '/register',
                 element: <Register/>
