@@ -63,7 +63,7 @@ console.log("Total Price:", totalPrice); // Log the total price
                 <div className="container max-w-screen-lg mx-auto">
                     <div>
                         <h2 className="font-semibold text-xl text-gray-600 mb-2">Cash On Delivery</h2>
-                        <p className="text-gray-500 mb-2">Total Price: ${totalPrice}</p> {/* Display totalPrice */}
+                        <p className="text-gray-500 mb-2">Total Price: Rs. {totalPrice}</p> {/* Display totalPrice */}
                         <p className="text-gray-500 mb-6">Items: {cartItems.length}</p>
 
                         <div className="bg-white rounded shadow-lg p-4 px-4 md:p-8 mb-6">

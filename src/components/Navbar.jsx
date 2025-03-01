@@ -3,9 +3,13 @@ import { HiMiniBars3CenterLeft, HiOutlineHeart, HiOutlineShoppingCart } from "re
 import { IoSearchOutline } from "react-icons/io5";
 import { HiOutlineUser } from "react-icons/hi";
 
+
 import avatarImg from "../assets/avatar.png";
 import { useState } from "react";
 import { useSelector } from "react-redux";
+
+import footerLogo  from "../assets/logo_without_background.png"
+
 
 const navigation = [
     {name: "Dashboard", href:"/user-dashboard"},
@@ -33,7 +37,7 @@ const Navbar = () => {
                 {/* Left Side */}
                 <div className="flex items-center md:gap-16 gap-4">
                     <Link to="/">
-                        <HiMiniBars3CenterLeft className="size-6" />
+                        <img src={footerLogo} alt="Logo" className="w-36"/>
                     </Link>
 
                     {/* Search Input */}
@@ -47,9 +51,9 @@ const Navbar = () => {
                     </div>
 
                     <div className="relative sm:w-72 w-40 space-x-2">
-                        
-                    <Link to="/browse" className="bg-primary p-1 sm:px-6 px-2 flex items-center rounded-sm">
-                        <span className="text-sm font-semibold sm:ml-1">
+                    {/* Enhanced Browse Link */}
+                    <Link to="/browse" className="bg-primary p-1 sm:px-6 px-2 flex items-center rounded-sm text-black hover: transition-all duration-300 ease-in-out transform hover:scale-105">
+                        <span className="text-sm sm:ml-1 font-semibold">
                             Browse
                         </span>
                     </Link>
@@ -101,10 +105,7 @@ const Navbar = () => {
                         )}
                     </div>
                     
-                    {/* Heart Icon (Hidden on smaller screens) */}
-                    <button className="hidden sm:block">
-                        <HiOutlineHeart className="size-6" />
-                    </button>
+                    
 
                     {/* Cart Link */}
                     <Link to="/cart" className="bg-primary p-1 sm:px-6 px-2 flex items-center rounded-sm">

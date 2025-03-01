@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 // Import Swiper React components
 import { Swiper, SwiperSlide } from 'swiper/react';
 
@@ -12,17 +12,17 @@ import 'swiper/css/navigation';
 import ProductCard from '../products/ProductCard';
 import { useFetchAllProductsQuery } from '../../redux/features/products/productApi';
 
-const Recommened = () => {
-   
+const Recommended = () => {
+    const { data: products = [] } = useFetchAllProductsQuery();
 
-    const{data:products = []} = useFetchAllProductsQuery();
+    // Filter products that are trending
+    const trendingProducts = products.filter(product => product.trending === true);
 
-  return (
-    <div className='py-16'>
-         <h2 className='text-3xl font-semibold mb-6'>Recommended for you </h2>
+    return (
+        <div className='py-16'>
+            <h2 className='text-3xl font-semibold mb-6'>Trending Products</h2>
 
-
-         <Swiper
+            <Swiper
                 slidesPerView={1}
                 spaceBetween={30}
                 navigation={true}
@@ -47,20 +47,18 @@ const Recommened = () => {
                 modules={[Pagination, Navigation]}
                 className="mySwiper"
             >
-
                 {
-                   products.length > 0 && products.slice(1, 100000000000000000000000000000000000000).map((product, index) => (
+                    // Only map through trending products
+                    trendingProducts.length > 0 ? trendingProducts.map((product, index) => (
                         <SwiperSlide key={index}>
-                            <ProductCard  product={product} />
+                            <ProductCard product={product} />
                         </SwiperSlide>
-                    ))
+                    )) : <p>No trending products available</p>
                 }
 
-
-
             </Swiper>
-    </div>
-  )
+        </div>
+    )
 }
 
-export default Recommened
+export default Recommended

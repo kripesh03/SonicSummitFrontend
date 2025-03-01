@@ -49,9 +49,9 @@ const ProductCard = ({ product }) => {
               : product?.description}
           </p>
           <p className="font-medium mb-5">
-            ${newPrice}{' '} {/* Use the converted value */}
+            Rs. {newPrice}{' '} {/* Use the converted value */}
             <span className="line-through font-normal ml-2">
-              ${oldPrice} {/* Use the converted value */}
+              Rs. {oldPrice} {/* Use the converted value */}
             </span>
           </p>
           <button

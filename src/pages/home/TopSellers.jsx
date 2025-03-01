@@ -34,7 +34,7 @@ export const TopSellers = () => {
 
   return (
     <div className="py-10">
-      <h2 className="text-3xl font-semibold mb-6">Top Sellers</h2>
+      <h2 className="text-3xl font-semibold mb-6">Recommended For You</h2>
 
       {/* cateogyr filter  garne */}
 
