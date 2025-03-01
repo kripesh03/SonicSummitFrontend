@@ -43,14 +43,16 @@ const CartPage = () => {
 
     // Handle Checkout with validation
     const handleCheckout = () => {
-        if (!token) {
+        if (cartItems.length === 0) {
+            alert("Your cart is empty! Add items to the cart before proceeding to checkout.");
+        } else if (!token) {
             alert("You need to log in first!");
             navigate("/login"); // Redirect to login page
         } else {
-            navigate("/checkout"); // Proceed to checkout if logged in
+            navigate("/checkout"); // Proceed to checkout if cart has items and user is logged in
         }
     };
-
+    
     return (
         <>
             <div className="flex mt-12 h-full flex-col overflow-hidden bg-white shadow-xl">

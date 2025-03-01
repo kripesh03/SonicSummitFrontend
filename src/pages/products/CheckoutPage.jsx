@@ -9,6 +9,7 @@ function CheckoutPage() {
 
     const [createOrder] = useCreateOrderMutation();
     const [isChecked, setIsChecked] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);  // Track submission state
     const navigate = useNavigate();
 
     console.log(cartItems);
@@ -21,19 +22,17 @@ function CheckoutPage() {
 
     // Calculate total price here from cartItems
     const totalPrice = cartItems.reduce((acc, item) => {
-    // Check if new_price exists and get the value from $numberDecimal
-    const price = item.new_price && item.new_price.$numberDecimal 
-        ? parseFloat(item.new_price.$numberDecimal) 
-        : 0;
-    return acc + price;
-}, 0).toFixed(2);
+        // Check if new_price exists and get the value from $numberDecimal
+        const price = item.new_price && item.new_price.$numberDecimal 
+            ? parseFloat(item.new_price.$numberDecimal) 
+            : 0;
+        return acc + price;
+    }, 0).toFixed(2);
 
-console.log("Total Price:", totalPrice); // Log the total price
-
-    
-    
+    console.log("Total Price:", totalPrice); // Log the total price
 
     const onSubmit = async (data) => {
+        setIsSubmitting(true);  // Set submitting state to true
         const newOrder = {
             name: data.name,
             email: data.email,  // Use the email entered by the user
@@ -51,9 +50,12 @@ console.log("Total Price:", totalPrice); // Log the total price
         try {
             const response = await createOrder(newOrder).unwrap();
             alert("Order placed successfully!");
-            navigate("/");  // Redirect to home page after order placement
+            navigate("/");  // Redirect to the home page after placing the order
+            window.location.reload();  
         } catch (error) {
             alert("Error placing order. Please try again.");
+        } finally {
+            setIsSubmitting(false);  // Reset submitting state
         }
     };
 
@@ -157,9 +159,10 @@ console.log("Total Price:", totalPrice); // Log the total price
                                 <div className="lg:col-span-2 flex justify-end items-center">
                                     <button
                                         type="submit"
-                                        className="bg-purple-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                                        disabled={isSubmitting}  // Disable button while submitting
+                                        className={`bg-purple-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline ${isSubmitting ? 'cursor-not-allowed opacity-50' : ''}`}
                                     >
-                                        Place Order
+                                        {isSubmitting ? 'Placing Order...' : 'Place Order'}
                                     </button>
                                 </div>
                             </form>
