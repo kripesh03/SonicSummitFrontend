@@ -45,6 +45,15 @@ const Navbar = () => {
                             className="bg-[#EAEAEA] w-full py-1 md:px-8 px-6 rounded-md focus:outline-none"
                         />
                     </div>
+
+                    <div className="relative sm:w-72 w-40 space-x-2">
+                        
+                    <Link to="/browse" className="bg-primary p-1 sm:px-6 px-2 flex items-center rounded-sm">
+                        <span className="text-sm font-semibold sm:ml-1">
+                            Browse
+                        </span>
+                    </Link>
+                    </div>
                 </div>
 
                 {/* Right Side */}

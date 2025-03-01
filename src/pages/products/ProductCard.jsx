@@ -39,6 +39,11 @@ const ProductCard = ({ product }) => {
             </h3>
           </Link>
           <p className="text-gray-600 mb-5">
+            {product?.artistName.length > 80
+              ? `${product?.artistName.slice(0, 80)}...`
+              : product?.artistName}
+          </p>
+          <p className="text-gray-600 mb-5">
             {product?.description.length > 80
               ? `${product?.description.slice(0, 80)}...`
               : product?.description}
