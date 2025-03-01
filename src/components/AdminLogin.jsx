@@ -17,7 +17,7 @@ const AdminLogin = () => {
       const navigate = useNavigate()
 
       const onSubmit = async (data) => {
-        // console.log(data)
+        console.log(data)
         try {
            const response =  await axios.post(`${getBaseUrl()}/api/admin/admin`, data, {
                 headers: {
