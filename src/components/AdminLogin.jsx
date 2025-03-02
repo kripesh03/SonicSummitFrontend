@@ -69,7 +69,7 @@ const AdminLogin = () => {
                     message && <p className='text-red-500 text-xs italic mb-3'>{message}</p>
                 }
                 <div className='w-full'>
-                    <button className='bg-blue-500 w-full hover:bg-blue-700 text-white font-bold py-2 px-8 rounded focus:outline-none'>Login </button>
+                    <button className='bg-blue-500 w-full hover:bg-blue-700 text-white font-bold py-2 px-8 rounded focus:outline-none' type='submit' >Login </button>
                 </div>
             </form>
 
