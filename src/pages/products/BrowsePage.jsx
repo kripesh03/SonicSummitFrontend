@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import ProductCard from "../products/ProductCard"; // Assuming ProductCard is already created
+import ProductCard from "../products/ProductCard";
 import { useFetchAllProductsQuery } from "../../redux/features/products/productApi";
 
 const categories = [
-  "Choose a Category",
+  "All Categories",
   "Album",
   "Mixtape",
   "Single",
@@ -12,25 +12,24 @@ const categories = [
 ];
 
 const BrowsePage = () => {
-  const [selectedCategory, setSelectedCategory] = useState("Choose a Category");
+  const [selectedCategory, setSelectedCategory] = useState("All Categories");
   const [searchTerm, setSearchTerm] = useState("");
   const [sortOption, setSortOption] = useState("default");
 
   const { data: products = [] } = useFetchAllProductsQuery();
-  console.log(products); // Debugging purpose
 
   // Filter products by category
-  const filteredProducts = selectedCategory === "Choose a Category"
+  const filteredProducts = selectedCategory === "All Categories"
     ? products
     : products.filter((product) => product.category === selectedCategory);
 
-  // Filter products by search term (name or artist)
+  // Filter products by search term
   const searchFilteredProducts = filteredProducts.filter((product) =>
     product.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
     product.artistName.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // Sorting products based on selected sort option
+  // Sort products
   const sortedProducts = [...searchFilteredProducts];
   if (sortOption === "price-low-high") {
     sortedProducts.sort((a, b) => Number(a.new_price.$numberDecimal) - Number(b.new_price.$numberDecimal));
@@ -38,72 +37,63 @@ const BrowsePage = () => {
     sortedProducts.sort((a, b) => Number(b.new_price.$numberDecimal) - Number(a.new_price.$numberDecimal));
   }
 
-  // Clear all filters
+  // Clear filters
   const clearFilters = () => {
-    setSelectedCategory("Choose a Category");
+    setSelectedCategory("All Categories");
     setSearchTerm("");
     setSortOption("default");
   };
 
   return (
-    <div className="py-10">
-      <h2 className="text-3xl font-semibold mb-6">Browse Products</h2>
+    <div className="py-10 px-6 max-w-7xl mx-auto">
+      <h2 className="text-4xl font-bold text-center mb-8">Browse Products</h2>
 
-      {/* Search Bar */}
-      <div className="mb-8 flex items-center gap-4">
+      {/* Filters */}
+      <div className="mb-8 flex flex-col sm:flex-row items-center justify-between gap-4">
         <input
           type="text"
           placeholder="Search by Name or Artist"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="border p-2 rounded-md w-64"
+          className="border p-3 rounded-md w-full sm:w-72 shadow-sm"
         />
         
-        {/* Category Dropdown */}
         <select
           onChange={(e) => setSelectedCategory(e.target.value)}
-          name="category"
-          id="category"
-          className="border p-2 rounded-md"
+          className="border p-3 rounded-md w-full sm:w-60 shadow-sm"
         >
           {categories.map((category, index) => (
-            <option key={index} value={category}>
-              {category}
-            </option>
+            <option key={index} value={category}>{category}</option>
           ))}
         </select>
 
-        {/* Sort Dropdown */}
         <select
           onChange={(e) => setSortOption(e.target.value)}
-          name="sort"
-          id="sort"
-          className="border p-2 rounded-md"
+          className="border p-3 rounded-md w-full sm:w-60 shadow-sm"
         >
-          <option value="default">Default</option>
+          <option value="default">Sort By</option>
           <option value="price-low-high">Price: Low to High</option>
           <option value="price-high-low">Price: High to Low</option>
         </select>
 
-        {/* Clear Filters Button */}
         <button
           onClick={clearFilters}
-          className="ml-4 bg-red-500 text-white p-2 rounded-md"
+          className="bg-red-500 text-white px-4 py-3 rounded-md shadow-md hover:bg-red-600"
         >
           Clear Filters
         </button>
       </div>
 
-      {/* Grid layout for products (2 per row) */}
+      {/* Products Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
         {sortedProducts.length > 0 ? (
           sortedProducts.map((product, index) => (
-            <div key={index} className="product-card-container">
+            <div key={index} className="bg-white shadow-lg rounded-lg p-4">
               <ProductCard product={product} />
             </div>
           ))
         ) : (
-          <p>No products found.</p>
+          <p className="text-center col-span-full text-gray-500">No products found.</p>
         )}
       </div>
     </div>
